@@ -49,3 +49,8 @@ schools.sim <- bugs(data = data,
 
 print(schools.sim)
 plot(schools.sim)
+
+# For a summary table, use
+# https://github.com/jkarreth/JKmisc/blob/master/mcmctab.R
+devtools::source_url("https://raw.githubusercontent.com/jkarreth/JKmisc/master/mcmctab.R")
+mcmctab(schools.sim, jags = FALSE)

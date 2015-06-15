@@ -39,3 +39,8 @@ schools.sim <- bugs(data, inits, parameters, model.file,
                     bugs.directory="/Applications/Wineskin/WinBUGS.app/Contents/Resources/drive_c/Program Files/WinBUGS14")
 print(schools.sim)
 plot(schools.sim)
+
+# For a summary table, use
+# https://github.com/jkarreth/JKmisc/blob/master/mcmctab.R
+devtools::source_url("https://raw.githubusercontent.com/jkarreth/JKmisc/master/mcmctab.R")
+mcmctab(schools.sim, jags = FALSE)
