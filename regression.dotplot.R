@@ -8,6 +8,7 @@
 
 ## if angell.fit is your R2jags/R2WinBUGS output object, and 
 ## angellfit.mcmc is that object as mcmc object:
+angellfit.mcmc <- as.mcmc(angell.fit)
 
 ## using the mcmcplots package:
 
@@ -17,13 +18,13 @@ abline(v = 0)
 
 ## using the arm package:
 
-coef.vect <- angellfit$BUGSoutput$summary[2:3, 1]
-sd.vect <- angellfit$BUGSoutput$summary[2:3, 2]
-short.names <- rownames(angellfit$BUGSoutput$summary[2:3,])
+coef.vect <- angell.fit$BUGSoutput$summary[2:3, 1]
+sd.vect <- angell.fit$BUGSoutput$summary[2:3, 2]
+short.names <- rownames(angell.fit$BUGSoutput$summary[2:3,])
 long.names <- c("Diversity", "Mobility")
 
 library(arm)
-coefplot(coef.vect, sd.vect, varnames=long.names, main="", xlim = c(-0.3, 0.05))
+coefplot(coef.vect, sd.vect, varnames = long.names, main = "", xlim = c(-0.3, 0.05))
 
 ## using ggplot2 from scratch
 library(ggplot2)
