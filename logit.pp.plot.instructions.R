@@ -18,35 +18,30 @@ library(ggplot2)
 ## FIRST, PREDICTED PROBABILITIES ON OBSERVED DATA ##
 #####################################################
 
-## In R, create matrix of observed data, containing all variables in your model
-turnout.dat <- as.data.frame(cbind(y, educ, age, south, govelec, closing))
+## Data
+turnout.dat <- read.csv("http://www.jkarreth.net/files/turnout.csv")
 
-## WINBUGS USERS: copy and paste 'stats' for p[i] from BUGS into R
-
-## JAGS users: fit model using
-## https://github.com/jkarreth/Bayes-2013/blob/master/turnout.instructions.R
+## First, fit a logit model using
+## https://github.com/jkarreth/Bayes/blob/master/turnout.instructions.R
 ## But be sure to monitor individual predicted probabilities (if you want to plot them)
+## The BUGS/JAGS object is named "turnout.fit" from here on
 
 ## R2WINBUGS/R2JAGS USERS, extract the posterior distributions from your jags/bugs object:
 turnout.mcmc <- as.mcmc(turnout.fit)
 turnout.mat <- as.matrix(turnout.mcmc)
 turnout.out <- as.data.frame(turnout.mat)
-
-## OR: WINBUGS/JAGS users, read in your coda files.
-turnout.out <- rbind(read.coda("CODAchain1.txt", "CODAindex.txt"), 
-	read.coda("CODAchain2.txt", "CODAindex.txt"))
 	
 ## Define vectors with the values of the predicted probabilities (pulled from the coda files or your mcmc list)
 ## This assumes that you used p in logit(p[i]) in your model
 ## grep("p[",) pulls all columns that start with p[
-p <- turnout.out[, grep("p[", colnames(turnout.out), fixed=T)]
+p <- turnout.out[, grep("p[", colnames(turnout.out), fixed = T)]
 
 ## If you want to plot mean predicted observed probabilities against a covariate,
 ## collapse p to the mean of all iterations
 p.mean <- apply(p, 2, mean)
 
 ## Plot predicted probability (of y=1) against *observed* values of age \
-## (most likely an ugly plot, b/c we have several y(x_i))
+## (most likely an ugly plot, b/c we have several y_i(x_i))
 plot(p.mean ~ turnout.dat.dat$age, xlim = c(min(turnout.dat.dat$age), max(turnout.dat.dat$age)))
 
 #################################################################
@@ -62,13 +57,7 @@ turnout.mcmc <- as.mcmc(turnout.fit)
 turnout.mat <- as.matrix(turnout.mcmc)
 b <- turnout.mat[ , 1:6] ## one column for each coefficient, in this case I had 6 coefficients
 
-## OR: BUGS/JAGS USERS: READ IN YOUR CODA FILES
-turnout.chains <- rbind(read.coda("CODAchain1.txt", "CODAindex.txt"), 
-                     read.coda("CODAchain2.txt", "CODAindex.txt"))
-b <- turnout.chains[ , 1:6]
-
 # Generate vector with the simulated range of X1 (here, age)
-turnout.dat <- data.frame(y, educ, age, south, govelec, closing)
 new.age <- seq(min(turnout.dat$age), max(turnout.dat$age))
 
 # Generate vectors set at desired values of the other covariates
