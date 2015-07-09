@@ -26,10 +26,15 @@ turnout.dat <- read.csv("http://www.jkarreth.net/files/turnout.csv")
 ## But be sure to monitor individual predicted probabilities (if you want to plot them)
 ## The BUGS/JAGS object is named "turnout.fit" from here on
 
-## R2WINBUGS/R2JAGS USERS, extract the posterior distributions from your jags/bugs object:
+## R2JAGS USERS, extract the posterior distributions from your jags/bugs object:
 turnout.mcmc <- as.mcmc(turnout.fit)
 turnout.mat <- as.matrix(turnout.mcmc)
 turnout.out <- as.data.frame(turnout.mat)
+
+## R2WINBUGS/R2OPENBUGS USERS, extract the posterior distributions from your jags/bugs object:
+## (in this case, we have 2 chains only)
+turnout.mat <- rbind(turnout.fit$sims.array[, 1, ], turnout.fit$sims.array[, 2, ])
+turnout.out <- data.frame(turnout.mat)
 	
 ## Define vectors with the values of the predicted probabilities (pulled from the coda files or your mcmc list)
 ## This assumes that you used p in logit(p[i]) in your model
