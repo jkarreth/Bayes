@@ -44,3 +44,8 @@ plot(schools.sim)
 # https://github.com/jkarreth/JKmisc/blob/master/mcmctab.R
 devtools::source_url("https://raw.githubusercontent.com/jkarreth/JKmisc/master/mcmctab.R")
 mcmctab(schools.sim, jags = FALSE)
+
+# Access posterior draws for postestimation
+# Rows are draws, columns are parameters
+
+schools.out <- schools.sim$sims.matrix
