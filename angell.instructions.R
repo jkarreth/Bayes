@@ -99,11 +99,19 @@ angellfit <- jags(data=angell.data, inits=NULL, angell.params, n.chains=2, n.ite
 angellfit.upd <- update(angellfit, n.iter=1000)
 angellfit.upd <- autojags(angellfit)  # this function will auto-update until convergence - check R2jags documentation how this is defined
 
-## Diagnoses
+## Model summary
 
 print(angellfit)
 
+## For a function to create a barebones summary table, use
+## https://github.com/jkarreth/JKmisc/blob/master/mcmctab.R
+## install.packages("devtools")
+devtools::source_url("https://raw.githubusercontent.com/jkarreth/JKmisc/master/mcmctab.R")
+mcmctab(angellfit)
+
 plot(angellfit)
+
+## Diagnostics
 
 traceplot(angellfit)
 
