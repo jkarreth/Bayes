@@ -1,7 +1,12 @@
-# Run OpenBUGS through R2OpenBUGS via Wineskin
-# Johannes Karreth
+#################################################
+## Run OpenBUGS through R2OpenBUGS on Mac OS X ##
+#################################################
 
-# (based on the help file for bugs())
+# Johannes Karreth
+# jkarreth@albany.edu
+
+# The code below uses the help file for bugs()
+# Adjust file paths to your system
 
 library(R2OpenBUGS)
 
@@ -44,3 +49,14 @@ schools.sim <- bugs(data = data,
 
 print(schools.sim)
 plot(schools.sim)
+
+# For a function to create a barebones summary table, use
+# https://github.com/jkarreth/JKmisc/blob/master/mcmctab.R
+# install.packages("devtools")
+devtools::source_url("https://raw.githubusercontent.com/jkarreth/JKmisc/master/mcmctab.R")
+mcmctab(schools.sim)
+
+# Access posterior draws for postestimation
+# Rows are draws, columns are parameters
+
+schools.out <- schools.sim$sims.matrix
