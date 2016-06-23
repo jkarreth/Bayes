@@ -1,12 +1,7 @@
-#################################################
-## Run OpenBUGS through R2OpenBUGS on Mac OS X ##
-#################################################
-
+# Run OpenBUGS through R2OpenBUGS via Wineskin
 # Johannes Karreth
-# jkarreth@albany.edu
 
-# The code below uses the help file for bugs()
-# Adjust file paths to your system
+# (based on the help file for bugs())
 
 library(R2OpenBUGS)
 
@@ -43,20 +38,9 @@ schools.sim <- bugs(data = data,
                     n.iter=5000,
                     debug = FALSE,
                     OpenBUGS.pgm = "/Applications/Wineskin/OpenBUGS.app/Contents/Resources/drive_c/Program Files/OpenBUGS/OpenBUGS323/OpenBUGS.exe",
-                    working.directory = "/Users/johanneskarreth/R/Bayes/R2WinBUGS",
+                    working.directory = "/Users/johanneskarreth/R/Bayes/R2OpenBUGS",    # Note: spaces in this path will create errors!
                     useWINE = TRUE,
                     bugs.seed = 12)
 
 print(schools.sim)
 plot(schools.sim)
-
-# For a function to create a barebones summary table, use
-# https://github.com/jkarreth/JKmisc/blob/master/mcmctab.R
-# install.packages("devtools")
-devtools::source_url("https://raw.githubusercontent.com/jkarreth/JKmisc/master/mcmctab.R")
-mcmctab(schools.sim)
-
-# Access posterior draws for postestimation
-# Rows are draws, columns are parameters
-
-schools.out <- schools.sim$sims.matrix
