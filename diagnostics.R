@@ -71,6 +71,7 @@ freq.mod <- lm(y ~ x1 + x2, data = sim.dat)
 summary(freq.mod)
 
 ## -------------------------------------
+## Note: use the path to your own WD here
 setwd("~/Documents/Dropbox/Uni/9 - ICPSR/2016/Applied Bayes/Tutorials/2 - JAGS and R")
 
 ## -------------------------------------
@@ -122,6 +123,7 @@ library("R2jags")
 set.seed(123) 
 
 ## -------------------------------------
+## Note: use the path to your own model.file here
 bayes.mod.fit.R2jags <- jags(data = sim.dat.jags, inits = bayes.mod.inits, 
   parameters.to.save = bayes.mod.params, n.chains = 3, n.iter = 9000, 
   n.burnin = 1000, 
@@ -212,6 +214,7 @@ ggs_geweke(bayes.mod.fit.gg)
 ggs_caterpillar(bayes.mod.fit.gg)
 
 ## -------------------------------------
+## Note: provide the path and filename for your desired output here
 ggmcmc(bayes.mod.fit.gg, 
        file = "~/Documents/Dropbox/Uni/9 - ICPSR/2016/Applied Bayes/Tutorials/2 - JAGS and R/bayes_fit_ggmcmc.pdf")
 
@@ -300,6 +303,7 @@ dump("sim.dat.list", file = "sim.dat.dump")
 bugs2jags("sim.dat.dump", "sim.dat")
 
 ## -------------------------------------
+## Note: use the path to your own WD and names for your output files here
 library("coda")
 setwd("~/Documents/Dropbox/Uni/9 - ICPSR/2016/Applied Bayes/Tutorials/2 - JAGS and R/")
 chain1 <- read.coda(output.file = "bayes_outchain1.txt", 
