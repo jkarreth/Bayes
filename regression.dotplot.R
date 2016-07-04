@@ -1,10 +1,9 @@
-#############################################
-## Bayesian regression results as dot plot ##
-######## Workflow for R2Jags/R2WinBUGS ######
-#############################################
+####################################################################
+## Coefficient dot plot of posterior distributions from JAGS/BUGS ##
+####################################################################
 
 ## Johannes Karreth
-## jkarreth@albany.edu
+## ICPSR Summer Program 2016
 
 ## if angell.fit is your R2jags/R2WinBUGS output object, and 
 ## angellfit.mcmc is that object as mcmc object:

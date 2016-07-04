@@ -1,10 +1,9 @@
-###########################################
-## Bayesian regression results to tables ##
-###### Workflow for R2Jags/R2WinBUGS ######
-###########################################
+############################################################################
+## Regression coefficient table of posterior distributions from JAGS/BUGS ##
+############################################################################
 
 ## Johannes Karreth
-## jkarreth@albany.edu
+## ICPSR Summer Program 2016
 
 ## if angell.fit is your R2jags/R2WinBUGS output object
 
@@ -21,7 +20,7 @@ regtable <- mcmctab(as.mcmc(angell.fit))
 
 ## Use regtable() for the summary
 
-## pick out the parameters of interest (here, the coefficients and SDs)
+## pick out the parameters of interest (e.g., the coefficients and SDs)
 
 regtable1 <- regtable[c(1:3), c(1:2)]
 
