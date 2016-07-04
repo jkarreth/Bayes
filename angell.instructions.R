@@ -3,7 +3,7 @@
 ############################################################
 
 ## Johannes Karreth
-## ICPSR Summer Program 2015
+## ICPSR Summer Program 2016
 
 ## Required packages
 library(foreign)
@@ -183,32 +183,3 @@ mcmcplot(angellfit.mcmc)
 ## superdiag
 library(superdiag)
 superdiag(angellfit.mcmc, burnin = 100)
-
-## If we want to examine the Coda files via Boa or Coda, use the function jags2:
-
-angell.params <- c("alpha", "beta1", "beta2")
-angellfit <- jags2(data=angell.data, inits=angell.inits, angell.params, n.chains=2, n.iter=5000, model.file=angell.model.jags, clearWD = FALSE)
-
-print(angellfit)
-plot(angellfit)
-## etc.
-
-## This will create the following files in your working directory:
-# /Users/johanneskarreth/R/CODAchain1.txt
-# /Users/johanneskarreth/R/CODAchain2.txt
-# /Users/johanneskarreth/R/CODAindex.txt
-# /Users/johanneskarreth/R/jagsdata.txt
-# /Users/johanneskarreth/R/jagsinits1.txt
-# /Users/johanneskarreth/R/jagsinits2.txt
-# /Users/johanneskarreth/R/jagsscript.txt
-
-## ... which can then be analyzed using BOA
-library(boa)
-boa.menu()
-
-## or CODA.
-
-library(coda)
-codamenu()
-
-## In both cases (using boa or coda), remember to rename the index file's extension to .ind, and the chain files to .out.
