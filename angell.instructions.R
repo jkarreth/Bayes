@@ -111,6 +111,29 @@ mcmctab(angellfit)
 
 plot(angellfit)
 
+## Re-specify the model to include a distribution for R-squared
+
+angell.model.jags <- function()  {
+
+ for(i in 1:N){
+ moral[i]~dnorm(mu[i], tau)
+ mu[i]<-alpha + beta1*hetero[i] + beta2*mobility[i]
+ y_ybar[i] <- pow(moral[i] - mean(moral[]), 2)
+ y_yhat[i] <- pow(moral[i] - mu[i], 2)
+ }
+ 
+ r2 <- (sum(y_ybar[]) - sum(y_yhat[])) / sum(y_ybar[])
+
+ alpha~dnorm(0, .01)
+ beta1~dunif(-100,100)
+ beta2~dunif(-100,100)
+ tau~dgamma(.01,.01)
+
+}
+
+angell.params <- c("alpha", "beta1", "beta2", "r2")
+angellfit <- jags(data=angell.data, inits=angell.inits, angell.params, n.chains=2, n.iter=9000, n.burnin=1000, model.file= angell.model.jags)
+
 ## Diagnostics
 
 traceplot(angellfit)
