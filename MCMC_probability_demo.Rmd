@@ -2,13 +2,15 @@
 title: "Predicted probabilities after Bayesian logit/probit models"
 author: "Johannes Karreth"
 date: "July 5, 2016"
-output: 
+output:
   html_document:
-      code_folding: hide
+    code_folding: hide
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, error = FALSE, message = FALSE, warning = FALSE)
+rm(list = ls()) ### To clear namespace
+knitr::opts_chunk$set(echo = TRUE, error = FALSE, message = FALSE, warning = FALSE, size = "scriptsize", fig.width = 6, fig.height = 4, out.width = '.99\\linewidth')
 ```
 
 # Purpose
@@ -78,13 +80,16 @@ mcmctab(as.mcmc(prot.fit))
 ```{r}
 devtools::source_url("https://raw.githubusercontent.com/jkarreth/JKmisc/master/MCMC_simcase_probs.R")
 
-prot_xmat <- model.matrix(protectionist ~ age + female + TUmember + partyid + ideology + schooling, 
+prot_xmat <- model.matrix(protectionist ~ age + female + TUmember + partyid + 
+                            ideology + schooling, 
                           data = prot.dat)
 
 prot_mcmc <- as.mcmc(prot.fit)
 prot_mcmc_mat <- as.matrix(prot_mcmc)[, 1:ncol(prot_xmat)]
 
-prot_schooling_sim <- seq(from = min(prot.dat$schooling), to = max(prot.dat$schooling), length.out = 10)
+prot_schooling_sim <- seq(from = min(prot.dat$schooling), 
+                          to = max(prot.dat$schooling), 
+                          length.out = 10)
 
 prot_sim_prob <- MCMC_simcase_probs(model_matrix = prot_xmat, 
                 mcmc_out = prot_mcmc_mat, 
@@ -92,7 +97,10 @@ prot_sim_prob <- MCMC_simcase_probs(model_matrix = prot_xmat,
                 x_range_vec = prot_schooling_sim)
 
 library(ggplot2)
-p_sim <- ggplot(data = prot_sim_prob, aes(x = predictor, y = median_pp)) + geom_line() + geom_ribbon(aes(ymin = lower_pp, ymax = upper_pp), alpha = 0.25) + ylim(c(0, 1)) + xlab("Schooling") + ylab("Pr(Against trade agreement)") + ggtitle("Average case approach") + theme_bw()
+p_sim <- ggplot(data = prot_sim_prob, aes(x = predictor, y = median_pp)) + 
+  geom_line() + geom_ribbon(aes(ymin = lower_pp, ymax = upper_pp), alpha = 0.25) + 
+  ylim(c(0, 1)) + xlab("Schooling") + ylab("Pr(Against trade agreement)") + 
+  ggtitle("Average case approach") + theme_bw()
 p_sim
 ```
 
@@ -101,13 +109,16 @@ p_sim
 ```{r}
 devtools::source_url("https://raw.githubusercontent.com/jkarreth/JKmisc/master/MCMC_observed_probs.R")
 
-prot_xmat <- model.matrix(protectionist ~ age + female + TUmember + partyid + ideology + schooling, 
+prot_xmat <- model.matrix(protectionist ~ age + female + TUmember + partyid + 
+                            ideology + schooling, 
                           data = prot.dat)
 
 prot_mcmc <- as.mcmc(prot.fit)
 prot_mcmc_mat <- as.matrix(prot_mcmc)[, 1:ncol(prot_xmat)]
 
-prot_schooling_sim <- seq(from = min(prot.dat$schooling), to = max(prot.dat$schooling), length.out = 10)
+prot_schooling_sim <- seq(from = min(prot.dat$schooling), 
+                          to = max(prot.dat$schooling), 
+                          length.out = 10)
 
 prot_obs_prob <- MCMC_observed_probs(model_matrix = prot_xmat, 
                 mcmc_out = prot_mcmc_mat, 
@@ -115,14 +126,23 @@ prot_obs_prob <- MCMC_observed_probs(model_matrix = prot_xmat,
                 x_range_vec = prot_schooling_sim)
 
 library(ggplot2)
-p_obs <- ggplot(data = prot_obs_prob, aes(x = predictor, y = median_pp)) + geom_line() + geom_ribbon(aes(ymin = lower_pp, ymax = upper_pp), alpha = 0.25) + ylim(c(0, 1)) + xlab("Schooling") + ylab("Pr(Against trade agreement") + ggtitle("Observed value approach") + theme_bw()
+p_obs <- ggplot(data = prot_obs_prob, aes(x = predictor, y = median_pp)) + 
+  geom_line() + geom_ribbon(aes(ymin = lower_pp, ymax = upper_pp), alpha = 0.25) + 
+  ylim(c(0, 1)) + xlab("Schooling") + ylab("Pr(Against trade agreement") + 
+  ggtitle("Observed value approach") + theme_bw()
 p_obs
 ```
 
 ### Comparing both approaches
 
 ```{r}
-p_combined <- ggplot(data = prot_sim_prob, aes(x = predictor, y = median_pp)) + geom_line(color = "blue") + geom_ribbon(aes(ymin = lower_pp, ymax = upper_pp), fill = "blue", alpha = 0.25) + ylim(c(0, 1)) + geom_line(data = prot_obs_prob, aes(x = predictor, y = median_pp), color = "orange") + geom_ribbon(data = prot_obs_prob, aes(ymin = lower_pp, ymax = upper_pp), fill = "orange", alpha = 0.25) + xlab("Schooling") + ylab("Pr(Against trade agreement)") + theme_bw()
+p_combined <- ggplot(data = prot_sim_prob, aes(x = predictor, y = median_pp)) + 
+  geom_line(color = "blue") + 
+  geom_ribbon(aes(ymin = lower_pp, ymax = upper_pp), fill = "blue", alpha = 0.25) + 
+  ylim(c(0, 1)) + 
+  geom_line(data = prot_obs_prob, aes(x = predictor, y = median_pp), color = "orange") + 
+  geom_ribbon(data = prot_obs_prob, aes(ymin = lower_pp, ymax = upper_pp), fill = "orange", alpha = 0.25) + 
+  xlab("Schooling") + ylab("Pr(Against trade agreement)") + theme_bw()
 
 p_combined
 ```
@@ -143,7 +163,8 @@ The estimated model is a Bayesian logistic regression model, fit in JAGS.
 ```{r}
 nom.dat <- rio::import("http://epstein.wustl.edu/research/Bork.dta")
 
-nom.datjags <- as.list(na.omit(nom.dat[, c("vote", "lackqual", "eucldist", "strngprs", "sameprty")]))
+nom.datjags <- as.list(na.omit(nom.dat[, c("vote", "lackqual", "eucldist", 
+                                           "strngprs", "sameprty")]))
 nom.datjags$N <- length(nom.datjags$vote)
 
 nom.mod <- function()  {
@@ -190,7 +211,9 @@ nom_xmat <- model.matrix(vote ~ lackqual + eucldist + strngprs + sameprty,
 nom_mcmc <- as.mcmc(nom.fit)
 nom_mcmc_mat <- as.matrix(nom_mcmc)[, 1:ncol(nom_xmat)]
 
-nom_distance_sim <- seq(from = min(nom.dat$eucldist), to = max(nom.dat$eucldist), length.out = 10)
+nom_distance_sim <- seq(from = min(nom.dat$eucldist), 
+                        to = max(nom.dat$eucldist), 
+                        length.out = 10)
 
 nom_sim_prob <- MCMC_simcase_probs(model_matrix = nom_xmat, 
                 mcmc_out = nom_mcmc_mat, 
@@ -198,7 +221,10 @@ nom_sim_prob <- MCMC_simcase_probs(model_matrix = nom_xmat,
                 x_range_vec = nom_distance_sim)
 
 library(ggplot2)
-p_sim <- ggplot(data = nom_sim_prob, aes(x = predictor, y = median_pp)) + geom_line() + geom_ribbon(aes(ymin = lower_pp, ymax = upper_pp), alpha = 0.25) + ylim(c(0, 1)) + xlab("Distance") + ylab("Pr(Yea vote)") + ggtitle("Average case approach") + theme_bw()
+p_sim <- ggplot(data = nom_sim_prob, aes(x = predictor, y = median_pp)) + 
+  geom_line() + geom_ribbon(aes(ymin = lower_pp, ymax = upper_pp), alpha = 0.25) + 
+  ylim(c(0, 1)) + xlab("Distance") + ylab("Pr(Yea vote)") + 
+  ggtitle("Average case approach") + theme_bw()
 p_sim
 ```
 
@@ -213,7 +239,9 @@ nom_xmat <- model.matrix(vote ~ lackqual + eucldist + strngprs + sameprty,
 nom_mcmc <- as.mcmc(nom.fit)
 nom_mcmc_mat <- as.matrix(nom_mcmc)[, 1:ncol(nom_xmat)]
 
-nom_distance_sim <- seq(from = min(nom.dat$eucldist), to = max(nom.dat$eucldist), length.out = 10)
+nom_distance_sim <- seq(from = min(nom.dat$eucldist), 
+                        to = max(nom.dat$eucldist), 
+                        length.out = 10)
 
 nom_obs_prob <- MCMC_observed_probs(model_matrix = nom_xmat, 
                 mcmc_out = nom_mcmc_mat, 
@@ -221,14 +249,22 @@ nom_obs_prob <- MCMC_observed_probs(model_matrix = nom_xmat,
                 x_range_vec = nom_distance_sim)
 
 library(ggplot2)
-p_obs <- ggplot(data = nom_obs_prob, aes(x = predictor, y = median_pp)) + geom_line() + geom_ribbon(aes(ymin = lower_pp, ymax = upper_pp), alpha = 0.25) + ylim(c(0, 1))  + xlab("Distance") + ylab("Pr(Yea vote)") + ggtitle("Observed value approach") + theme_bw()
+p_obs <- ggplot(data = nom_obs_prob, aes(x = predictor, y = median_pp)) + 
+  geom_line() + geom_ribbon(aes(ymin = lower_pp, ymax = upper_pp), alpha = 0.25) + 
+  ylim(c(0, 1))  + xlab("Distance") + ylab("Pr(Yea vote)") + 
+  ggtitle("Observed value approach") + theme_bw()
 p_obs
 ```
 
 ### Comparing both approaches
 
 ```{r}
-p_combined <- ggplot(data = nom_sim_prob, aes(x = predictor, y = median_pp)) + geom_line(color = "blue") + geom_ribbon(aes(ymin = lower_pp, ymax = upper_pp), fill = "blue", alpha = 0.25) + ylim(c(0, 1)) + geom_line(data = nom_obs_prob, aes(x = predictor, y = median_pp), color = "orange") + geom_ribbon(data = nom_obs_prob, aes(ymin = lower_pp, ymax = upper_pp), fill = "orange", alpha = 0.25) + xlab("Distance") + ylab("Pr(Yea vote)") + theme_bw()
+p_combined <- ggplot(data = nom_sim_prob, aes(x = predictor, y = median_pp)) + 
+  geom_line(color = "blue") + geom_ribbon(aes(ymin = lower_pp, ymax = upper_pp), fill = "blue", alpha = 0.25) + 
+  ylim(c(0, 1)) + 
+  geom_line(data = nom_obs_prob, aes(x = predictor, y = median_pp), color = "orange") + 
+  geom_ribbon(data = nom_obs_prob, aes(ymin = lower_pp, ymax = upper_pp), fill = "orange", alpha = 0.25) + 
+  xlab("Distance") + ylab("Pr(Yea vote)") + theme_bw()
 p_combined
 ```
 
