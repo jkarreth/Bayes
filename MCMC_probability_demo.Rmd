@@ -1,11 +1,11 @@
 ---
 title: "Predicted probabilities after Bayesian logit/probit models"
 author: "Johannes Karreth"
-date: "July 5, 2016"
+date: "July 12, 2017"
 output:
+  pdf_document: default
   html_document:
     code_folding: hide
-  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
